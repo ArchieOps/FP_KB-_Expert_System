@@ -1,13 +1,11 @@
 tebak :-  hypothesize(Food),
-          write('Ku rasa makanannya adalah...'),
+          write('Ku rasa makanannya adalah ->'),
           write(Food), nl, undo.
-
 
 hypothesize(soto_mie) :- soto_mie, !.
 hypothesize(bakso) :- bakso, !.
 hypothesize(nasi_goreng) :- nasi_goreng, !.
 hypothesize(bika_ambon) :- bika_ambon, !.
-hypothesize(nasi_uduk) :- nasi_uduk, !.
 hypothesize(sate) :- sate, !.
 hypothesize(rawon) :- rawon, !.
 hypothesize(gado_gado) :- gado_gado, !.
@@ -36,9 +34,6 @@ nasi_goreng :- nasi,
 bika_ambon :- manis,
               verify(berpori_pori).
 
-nasi_uduk :- nasi,
-             manis,
-
 sate :- verify(pakai_kecap),
         verify(dibakar),
         verify(ditusuk),
@@ -46,7 +41,7 @@ sate :- verify(pakai_kecap),
 
 rawon :- berkuah, 
          nasi,
-         verify(pakai_daging),
+         verify(pakai_daging).
           
 gado_gado :-  verify(pakai_lontong),
               verify(pakai_sayur),
@@ -64,11 +59,11 @@ pempek :- berkuah,
             
 papeda :- verify(gurih),
           verify(kenyal),
-          verify(pakai_sagu)
+          verify(pakai_sagu).
 
 pie_susu :- manis,
             verify(pakai_telur),
-            verify(pakai_susu),
+            verify(pakai_susu).
 
 /* classification rules */
 jawa_timur :- verify(asin),
@@ -104,17 +99,14 @@ berkuah :- verify(pakai_mangkok).
 manis :- verify(pakai_gula), !.
 manis :- verify(pakai_santan).
 
-bergizi :-  verify(pakai_sayur),
-            verify(pakai_protein),
-            verify
 
 
 /* how to ask questions */
 ask(Question) :-
-        write('Does the food have the following attribute: '),
+        write('Apakah makanan tersebut mempunyai ciri-ciri seperti ini: '),
         write(Question), write('? '),
          read(Response), nl,
-         ( (Response == yes ; Response == y)
+         ( (Response == iya ; Response == ya)
          -> assert(yes(Question)) ;
          assert(no(Question)), fail).
 :- dynamic yes/1,no/1.
