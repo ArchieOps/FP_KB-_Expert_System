@@ -1,49 +1,67 @@
-tebak_makanan :-  hypothesize(Food),
-          write('Ku rasa makanannya adalah: '),
+tebak :-  hypothesize(Food),
+          write('Ku rasa makanannya adalah ->'),
           write(Food), nl, undo.
 
-% --- soto ---
-hypothesize(soto_bogor) :- soto_bogor, !.
-hypothesize(soto_jakarta) :- soto_jakarta, !.
-hypothesize(soto_lamongan) :- soto_lamongan, !.
-% ----------
-
-% ---sate---
-hypothesize(sate_madura) :- sate_madura, !.
-hypothesize(sate_padang) :- sate_padang, !.
-hypothesize(sate_lilit) :- sate_lilit, !.
-% ----------
-
-% ---nasi---
-hypothesize(nasi_liwet) :- nasi_liwet, !.
-hypothesize(nasi_kebuli) :- nasi_kebuli, !.
-% ----------
-
-% ---ikan---
-hypothesize(ikan_kuah_kuning_papua) :- ikan_kuah_kuning_papua, !.
+% Daerah tidak dispesifikasikan
 hypothesize(ikan_bakar_parape_makasar) :- ikan_bakar_parape_makasar, !.
-hypothesize(pepes_ikan_bakar_sunda) :- pepes_ikan_bakar_sunda, !.
-% ----------
 
+% Jawa barat
+hypothesize(soto_bogor) :- soto_bogor, !.
+hypothesize(nasi_liwet) :- nasi_liwet, !.
+hypothesize(pepes_ikan_bakar_sunda) :- pepes_ikan_bakar_sunda, !.
+
+% Jakarta
+hypothesize(soto_jakarta) :- soto_jakarta, !.
+hypothesize(nasi_kebuli) :- nasi_kebuli, !.
+
+% Jawa timur
+hypothesize(soto_lamongan) :- soto_lamongan, !.
+hypothesize(sate_madura) :- sate_madura, !.
+
+% Bali
+hypothesize(sate_lilit) :- sate_lilit, !.
+
+% Sumatra barat
+hypothesize(sate_padang) :- sate_padang, !.
+
+% Papua
+hypothesize(ikan_kuah_kuning_papua) :- ikan_kuah_kuning_papua, !.
 hypothesize(makanan_tidak_ada_didefinisi).
 
-% ------ soto ------
+ikan_bakar_parape_makasar :-  bakar, 
+                              verify(pakai_ikan_kue),
+                              verify(kecap), 
+                              verify(jeruk_nipis), 
+                              verify(asam_jawa).
+
 soto_bogor :-  jawa_barat, rebus,
                verify(pakai_kikil), 
                verify(pakai_risol).
 
+nasi_liwet :-   jawa_barat,
+    			verify(pakai_santan),
+                verify(menggunakna_sambal_goreng_labu_siam),
+                verify(menggunakan_ayam_opor),
+                verify(menggunakan_areh).
+
+
+pepes_ikan_bakar_sunda :- jawa_barat, bakar,
+                          verify(ikan_seluang),
+                          verify(daun_kemangi).
+                          
 soto_jakarta :- jakarta, rebus,
                 verify(pakai_emping).
+
+
+nasi_kebuli :-  jakarta,
+                verify(menggunakan_daging_kambing),
+                verify(ditaburi_kurma).
               
 soto_lamongan :- jawa_timur, rebus,
                  verify(pakai_taburan_koya),
                  verify(daging_diiris_menyamping), 
                  verify(pakai_kerupuk_udang).  
-% ------ end soto ------
 
-
-
-% ------ sate ------
 sate_madura :-  jawa_timur, sambal_kacang, bakar,
                 verify(pakai_kecap),
                 verify(daging_ayam).
@@ -56,43 +74,12 @@ sate_lilit :-  bali, bakar,
                verify(daging_babi),
                verify(daging_dicincang),
                verify(tusuk_batang_sereh).
-% ------ end sate ------
-
-
-
-% ------ nasi ------
-nasi_liwet :-   jawa_barat, 
-                verify(menggunakna_sambal_goreng_labu_siam),
-                verify(menggunakan_ayam_opor),
-                verify(menggunakan_areh).
-
-nasi_kebuli :-  jakarta,
-                verify(menggunakan_daging_kambing),
-                verify(ditaburi_kurma).
-% ------ end nasi ------
-
-
-
-% ------ ikan ------
-ikan_bakar_parape_makasar :-  bakar, 
-                              verify(pakai_ikan_kue),
-                              verify(kecap), 
-                              verify(jeruk_nipis), 
-                              verify(asam_jawa).
-
-pepes_ikan_bakar_sunda :- jawa_barat, bakar,
-                          verify(ikan_seluang),
-                          verify(daun_kemangi).
 
 ikan_kuah_kuning_papua :- papua, 
-    					  rebus, 
-    					  bumbu_kuning,
+                          rebus, 
+                          bumbu_kuning,
                           verify(pakai_ikan_tongkol).
-                          
-% ------ end ikan ------
 
-
-% ------ daerah -------
 jawa_timur :- verify(pakai_petis), !.
 jawa_timur :- bumbu_merah, !.
 jawa_timur :- bumbu_putih.
@@ -114,8 +101,6 @@ sumatera_barat :- bumbu_kuning, !.
 sumatera_barat :- bumbu_merah.
 
 papua :- verify(tepung_sagu).
-         
-% ------ end daerah ------
 
 /*
  ------ bumbu dasar ------
@@ -128,24 +113,18 @@ sambal kacang: pecel, sate, gado-gado, lotek, serta rujak.
 */
 
 bumbu_putih :- verify(pakai_bumbu_putih).
-bumbu_merah :- verify(pakai_cabai_merah), bumbu_putih.
-bumbu_kuning :- verify(pakai_kunyit), bumbu_putih.
+bumbu_merah :- verify(pakai_bumbu_merah).
+bumbu_kuning :- verify(pakai_kunyit).
 sambal_kacang :- verify(pakai_bumbu_kacang).
+% sambal_kacang :- verify(pakai_kacang_tanah), verify(pakai_cabai).
 
 % ------ end bumbu dasar ------
 
-
-
-
 % ------ teknik masak ------
-
 rebus :- verify(direbus).
 bakar :- verify(dibakar).
 goreng :- verify(digoreng).
-
 % ----end teknik masak ----
-
-
 
 /* how to ask questions */
 ask(Question) :-
@@ -164,7 +143,6 @@ verify(S) :- (yes(S) -> true ; (no(S) -> fail ; ask(S))).
 undo :- retract(yes(_)),fail.
 undo :- retract(no(_)),fail.
 undo.
-
 
 /* Referensi 
 soto lamongan : https://travel.kompas.com/read/2017/06/08/152100527/ini.perbedaan.soto.lamongan.dengan.soto.lainnya?page=all
